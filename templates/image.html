@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<html>
+<body>
+<h2>HTML Image</h2>
+<!--img src="static/img/img_girl.jpg" alt="Girl in a jacket" width="500" height="600">-->
+<a href={{ url_for('hellovar', name='진구') }}>
+<img src={{ url_for('static', filename='img/img_girl.jpg') }}>
+</a>
+</body>
+</html>

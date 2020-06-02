@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+<body>
+<h2>게임 스타트</h2>
+{{ data.name }} 을(를) 캐릭터로 선택하셨습니다. 대결 시작합니다.<br>
+상대를 만났습니다. 어떻게 하시겠습니까?<br>
+<a href={{ url_for('input', num=1) }}>1번째 기술 사용한다</a><br>
+<a href={{ url_for('input', num=2) }}>2번째 기술 사용한다</a><br>
+<a href={{ url_for('input', num=3) }}>3번째 기술 사용한다</a><br>
+<a href={{ url_for('input', num=4) }}>기권한다</a><br>
+</body>
+</html>
