@@ -2,6 +2,7 @@ from flask import Flask, request, render_template, redirect, url_for, abort, jso
 app = Flask(__name__) 
 
 import gameset
+import dbdb
 
 @app.route('/')
 def index(): 
@@ -29,19 +30,19 @@ def input(num):
             with open("static/save.txt", "r", encoding='utf-8') as f:
                 data = f.read()
                 character = json.loads(data)
-            return "{} 기술을 사용하여 공격합니다.".format(character["skill"][0])
+            return "{} 기술을 사용하여 승리합니다.".format(character["skill"][0])
         elif num == 2:
             with open("static/save.txt", "r", encoding='utf-8') as f:
                 data = f.read()
                 character = json.loads(data)
-            return "{} 기술을 사용하여 공격합니다.".format(character["skill"][1])
+            return "{} 기술을 사용하여 승리합니다.".format(character["skill"][1])
         elif num == 3:
             with open("static/save.txt", "r", encoding='utf-8') as f:
                 data = f.read()
                 character = json.loads(data)
-            return "{} 기술을 사용하여 공격합니다.".format(character["skill"][2])
+            return "{} 기술을 사용하여 승리합니다.".format(character["skill"][2])
         elif num == 4:
-            return "도망갑니다"
+            return "기권하여 패배합니다."
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():

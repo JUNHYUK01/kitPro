@@ -2,6 +2,10 @@
 # Edit at https://www.gitignore.io/?templates=code,flask,python,windows
 ### 가상환경 ###
 myenv/
+###
+save.txt
+###
+*.db
 
 ### Code ###
 .vscode/*
