@@ -67,18 +67,16 @@ def method():
         return "GET 방법이다."
     else: 
         num = request.form["num"] 
-        name = request.form["name"] 
-        print(num, name)
-        with open("static/save.txt", "w", encoding = "utf-8/") as f:
-            f.write("%s, %s" % (num, name))
+        name = request.form["name"]
+        dbdb.insert_data(num, name)
         return "POST로 전달된 데이터({}, {})".format(num, name) 
 
 @app.route('/getinfo')  ## JSON 파일 입출력 예시 학생 로그인
 def getinfo(): 
-    # 파일 입력
-    with open("static/save.txt", "r", encoding = "utf-8/") as file:
-        student = file.read().split(',')
-    return '번호 : {}, 이름 : {}'.format(student[0], student[1])
+    ret = dbdb.select_all()
+    print(ret)
+    return render_template('getinfo.html', data=ret)
+    # return '번호 : {}, 이름 : {}'.format(ret[0], ret[1])
 
 @app.route('/move/<site>')
 def insite(site):
