@@ -6,7 +6,7 @@ def dbcon():
 def create_table(): 
     try:
         query = '''
-            CREATE TABLE "users" (
+            CREATE TABLE "user" (
             	"id"	VARCHAR(50),
             	"pw"	VARCHAR(50),
             	"name"	VARCHAR(50),
@@ -65,3 +65,4 @@ def select_num(num):
 # insert_data('20201236', '디비')
 # ret = select_num('20201236')
 # print(ret)
+create_table()

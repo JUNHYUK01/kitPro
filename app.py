@@ -1,8 +1,9 @@
-from flask import Flask, request, render_template, redirect, url_for, abort, json
+from flask import Flask, request, render_template, redirect, url_for, abort, json, session
 app = Flask(__name__) 
 
 import gameset
 import dbdb
+app.secret_key = b'ee3aaa!111/'
 
 @app.route('/')
 def index(): 
@@ -53,13 +54,27 @@ def login():
         pw = request.form['pw']
         
         if id == 'abc' and pw == '1234':
-            return "안녕하세요 {}님".format(id)
+            session['user'] =id
+            return '''
+                <script> alert("안녕하세요 {}님")
+                location.href = "/form"
+                </script>
+            '''.format(id)
+            # return redirect(url_for('form'))
         else:
-            return "로그인 실패"
+            return "아이디 또는 패스워드를 확인하세요"
+
+@app.route('/logout') 
+def logout(): 
+    session.pop('user', None)
+    return redirect(url_for('form'))
 
 @app.route('/form') 
-def form(): 
-    return render_template("kitlogin.html") 
+def form():
+    if 'user' in session: 
+        return render_template('naver.html') 
+    return redirect(url_for('login'))
+
     
 @app.route('/method', methods=['GET', 'POST']) 
 def method(): 
