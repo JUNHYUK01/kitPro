@@ -1,9 +1,11 @@
-<!DOCTYPE html>
-<html>
-<body>
+{% extends "layout.html" %} 
+{% block title %}학생정보 페이지{% endblock %} 
+{% block head %} {{ super() }} {% endblock %} 
+{% block content %} 
+
 <h2>학생 정보 출력</h2>
 {% for i in data %}
-    학번: {{ i[0] }}  이름: {{ i[1] }}
+    학번: {{ i[0] }}  이름: {{ i[1] }} <br>
 {% endfor %}
-</body>
-</html>
+
+{% endblock %}

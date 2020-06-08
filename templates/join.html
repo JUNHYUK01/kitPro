@@ -1,0 +1,17 @@
+{% extends "layout.html" %} 
+{% block title %}회원가입 페이지{% endblock %} 
+{% block head %} {{ super() }} {% endblock %} 
+{% block content %} 
+
+<h2>KIT 회원가입</h2> 
+<form action="/join" method="POST"> 
+    <label for="id">ID:</label><br> 
+    <input type="text" id="id" name="id"><br> 
+    <label for="pw">PW:</label><br>
+    <input type="password" id="pw" name="pw"><br>
+    <label for="fname">이름:</label><br> 
+    <input type="text" id="fname" name="name"><br><br>
+    <input type="submit" value="가입하기">
+</form>
+    
+{% endblock %}

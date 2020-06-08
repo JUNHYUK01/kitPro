@@ -7,7 +7,7 @@ app.secret_key = b'ee3aaa!111/'
 
 @app.route('/')
 def index(): 
-    return 'mainpage'
+    return render_template('main.html')
     
 @app.route('/hello')
 def hello(): 
@@ -45,6 +45,7 @@ def input(num):
         elif num == 4:
             return "기권하여 패배합니다."
 
+##로그인
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'GET':
@@ -53,32 +54,52 @@ def login():
         id = request.form['id']
         pw = request.form['pw']
         
-        if id == 'abc' and pw == '1234':
-            session['user'] =id
-            return '''
-                <script> alert("안녕하세요 {}님")
-                location.href = "/form"
-                </script>
-            '''.format(id)
-            # return redirect(url_for('form'))
+        ret = dbdb.select_user(id, pw)
+        if ret != None:
+            return render_template('fin.html')
         else:
-            return "아이디 또는 패스워드를 확인하세요"
+            return '''
+                    <script>
+                    alert('아이디 또는 비밀번호가 틀립니다.');
+                    location.href='/join';
+                    </script>
+                    '''
+
+##회원가입
+@app.route('/join', methods=['GET', 'POST'])
+def join():
+    if request.method == 'GET':
+        return render_template('join.html')
+    else:
+        id = request.form['id']
+        pw = request.form['pw']
+        name = request.form['name']
+        ret = dbdb.check_id(id)
+        if ret != None:
+            return '''
+                    <script>
+                    alert('이미 존재하는 아이디입니다.');
+                    location.href='/join';
+                    </script>
+                    '''
+        dbdb.insert_user(id, pw, name)
+        return redirect(url_for('login'))
 
 @app.route('/logout') 
 def logout(): 
-    session.pop('user', None)
-    return redirect(url_for('form'))
+    session.pop('users', None)
+    return redirect(url_for('index'))
 
 @app.route('/form') 
 def form():
-    if 'user' in session: 
+    if 'users' in session: 
         return render_template('naver.html') 
     return redirect(url_for('login'))
 
     
 @app.route('/method', methods=['GET', 'POST']) 
 def method(): 
-    if request.method == 'GET': # args_dict = request.args.to_dict() # print(args_dict) 
+    if request.method == 'GET':
         return "GET 방법이다."
     else: 
         num = request.form["num"] 
@@ -87,11 +108,12 @@ def method():
         return "POST로 전달된 데이터({}, {})".format(num, name) 
 
 @app.route('/getinfo')  ## JSON 파일 입출력 예시 학생 로그인
-def getinfo(): 
+def getinfo():
+    # if 'users' in session:
     ret = dbdb.select_all()
-    print(ret)
-    return render_template('getinfo.html', data=ret)
-    # return '번호 : {}, 이름 : {}'.format(ret[0], ret[1])
+    #     return '번호 : {}, 이름 : {}'.format(ret[0], ret[1])
+    #     return render_template('getinfo.html', data = ret)
+    return render_template('getinfo.html', data = ret)
 
 @app.route('/move/<site>')
 def insite(site):
@@ -106,18 +128,6 @@ def insite(site):
 @app.errorhandler(404)
 def page_not_found(error):
     return "페이지가 없습니다. URL 확인하세요", 404
-
-@app.route('/naver')
-def naver(): 
-    return redirect("https://www.naver.com/")
-
-@app.route('/daum')
-def daum():
-    return redirect("https://www.daum.net/")
-
-@app.route('/img')
-def img():
-    return render_template('image.html')
 
 if __name__ == '__main__': 
     app.run(debug=True)
