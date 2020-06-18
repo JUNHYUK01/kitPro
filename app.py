@@ -3,7 +3,8 @@ app = Flask(__name__)
 
 import gameset
 import dbdb
-app.secret_key = b'ee3aaa!111/'
+
+app.secret_key = b'aaa!111/'
 
 @app.route('/')
 def index(): 
@@ -56,14 +57,10 @@ def login():
         
         ret = dbdb.select_user(id, pw)
         if ret != None:
-            return render_template('fin.html')
+            session['user'] = id
+            return redirect(url_for('index'))
         else:
-            return '''
-                    <script>
-                    alert('아이디 또는 비밀번호가 틀립니다.');
-                    location.href='/join';
-                    </script>
-                    '''
+            return redirect(url_for('login'))
 
 ##회원가입
 @app.route('/join', methods=['GET', 'POST'])
@@ -87,14 +84,12 @@ def join():
 
 @app.route('/logout') 
 def logout(): 
-    session.pop('users', None)
+    session.pop('user', None)
     return redirect(url_for('index'))
 
 @app.route('/form') 
 def form():
-    if 'users' in session: 
-        return render_template('naver.html') 
-    return redirect(url_for('login'))
+    return render_template('login.html')
 
     
 @app.route('/method', methods=['GET', 'POST']) 
@@ -107,13 +102,15 @@ def method():
         dbdb.insert_data(num, name)
         return "POST로 전달된 데이터({}, {})".format(num, name) 
 
+
+## 학생정보
 @app.route('/getinfo')  ## JSON 파일 입출력 예시 학생 로그인
 def getinfo():
-    # if 'users' in session:
-    ret = dbdb.select_all()
-    #     return '번호 : {}, 이름 : {}'.format(ret[0], ret[1])
-    #     return render_template('getinfo.html', data = ret)
-    return render_template('getinfo.html', data = ret)
+    if 'user' in session:
+        ret = dbdb.select_all()
+        return render_template('getinfo.html', data = ret)
+
+    return redirect(url_for('login'))
 
 @app.route('/move/<site>')
 def insite(site):
